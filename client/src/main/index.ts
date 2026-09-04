@@ -45,7 +45,6 @@ function createWindow(): void {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-    setupAutoUpdater(mainWindow)
   }
 }
 
@@ -58,7 +57,9 @@ app.whenReady().then(() => {
 
   startServer()
   createWindow()
+
   createMenu(mainWindow)
+  setupAutoUpdater(mainWindow)
 
   // autoUpdate
 

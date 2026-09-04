@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -36,6 +36,19 @@
       }
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Jmine212-tech/LAN_ICPS.git"
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "Jmine-212",
+      "repo": "LAN_ICPS",
+      "releaseType": "release",
+      "private": false
+    }
+  ],
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
