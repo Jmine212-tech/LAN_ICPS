@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:3010/api/customers
+
+### 1. GET all items
+GET {{baseUrl}}
+
+###
+
+### 2. CREATE a new item
+# @name createItem
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "user",
+  "model": "vivo v9",
+  "IMEI": "09 999 9999"
+}
+
+###
+
+### 3. UPDATE an item (uses ID from step 2 if using VS Code REST Client)
+@itemId = 6a98d3077f5398f7ff7520a0
+
+PUT {{baseUrl}}/{{itemId}}
+Content-Type: application/json
+
+{
+  "name": "user_1",
+  "model": "vivo v9_update",
+  "IMEI": "09 999 9999"
+}
+
+###
+
+### 4. DELETE an item
+DELETE {{baseUrl}}/{{itemId}}
