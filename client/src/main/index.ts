@@ -22,8 +22,9 @@ function createWindow(): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 900,
-    height: 670,
+    height: 700,
     show: false,
+    resizable: false,
     autoHideMenuBar: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -55,13 +56,12 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  // core
   startServer()
   createWindow()
 
   createMenu(mainWindow)
   setupAutoUpdater(mainWindow)
-
-  // autoUpdate
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

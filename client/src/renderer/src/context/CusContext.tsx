@@ -1,5 +1,5 @@
 import { createContext } from 'react'
 
-const CusContext = createContext([])
+const CusContext = createContext<Customer[]>([])
 
 export default CusContext;

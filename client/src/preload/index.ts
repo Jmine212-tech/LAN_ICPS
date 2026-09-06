@@ -11,7 +11,8 @@ const update = {
     const listener = (_, msg): void => callback(msg)
     ipcRenderer.on('update:status', listener)
     return () => ipcRenderer.off('update:status', listener)
-  }
+  },
+  version: () => ipcRenderer.invoke('update:version')
 }
 
 if (process.contextIsolated) {

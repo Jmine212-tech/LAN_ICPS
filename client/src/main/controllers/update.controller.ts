@@ -1,5 +1,5 @@
 import { autoUpdater } from 'electron-updater'
-import { BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 // Disable automatic downloading if you want explicit download control via handleDownload
 autoUpdater.autoDownload = false
@@ -17,6 +17,10 @@ export const setupAutoUpdater = (win: BrowserWindow): void => {
 
   ipcMain.handle('update:download', async () => {
     return await autoUpdater.downloadUpdate()
+  })
+
+  ipcMain.handle('update:version', () => {
+    return app.getVersion()
   })
 
   // Register Event Listeners
