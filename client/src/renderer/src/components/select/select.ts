@@ -1,0 +1,1 @@
+export const select_md = 'w-40 border border-stone-300 rounded-xl text-center p-1 bg-stone-100'

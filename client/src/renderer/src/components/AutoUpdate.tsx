@@ -29,7 +29,7 @@ export default function AutoUpdate(): React.JSX.Element {
         } else if (res.status == 'progress') {
           setMessage(res.message)
           setStatus(res.status)
-          setProgress(res.progress?.percent)
+          setProgress(Math.round(res.progress?.percent))
           setStatus(res.status)
           console.log(res.progress)
         } else if (res.status == 'downloaded') {

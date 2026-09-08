@@ -97,7 +97,7 @@ export default function Layout(): React.JSX.Element {
         </nav>
       </header>
 
-      <main className="MAIN w-full h-8/10 border border-stone-400 rounded-xl p-2.5">
+      <main className="MAIN w-full h-8/10 border border-stone-400 rounded-xl p-2.5 overflow-scroll">
         <HostContext value={host}>
           <CusContext value={customers}>
             <Outlet />

@@ -7,6 +7,8 @@ interface Window {
     onDownload: () => void
     onStatus: (msg: unknown) => unknown
     version: () => unknowns
+
+    getPreview: () => Promise<{ success: boolean; url?: string; error?: string }>
   }
 }
 

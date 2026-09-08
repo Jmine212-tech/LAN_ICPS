@@ -5,6 +5,7 @@ import MainPage from './Pages/MainPage'
 import Setting from './Pages/SettingPage'
 import Dashboard from './Pages/DashboardPage'
 import ServicePage from './Pages/ServicePage'
+import InvoiceView from './Pages/InvioceView'
 
 export default function App(): React.JSX.Element {
   return (
@@ -16,6 +17,8 @@ export default function App(): React.JSX.Element {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="setting" element={<Setting />} />
         </Route>
+        
+          <Route path="/print" element={<InvoiceView />} />
       </Routes>
     </HashRouter>
   )

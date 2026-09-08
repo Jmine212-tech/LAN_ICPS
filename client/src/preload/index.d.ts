@@ -5,5 +5,6 @@ declare global {
     electron: ElectronAPI
     api: unknown
     update: unknown
+    getPreview: () => Promise<{ success: boolean; url?: string; error?: string }>
   }
 }

@@ -48,7 +48,7 @@ export default function AddCusForm(): React.JSX.Element {
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center bg-stone-700 text-white">
       <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col">
         <label className="flex">
           <p>id: {seNumb} </p>

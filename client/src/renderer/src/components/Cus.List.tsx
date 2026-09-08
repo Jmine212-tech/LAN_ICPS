@@ -1,12 +1,13 @@
 import { useContext, useState } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
 
 import CusContext from '@renderer/context/CusContext'
 import HostContext from '@renderer/context/HostContext'
 import { input_md } from './input/input'
 import { btn_md, btn_md_error, btn_md_success } from './button/btn'
-import { ArrowLeft, Pencil, Trash } from 'lucide-react'
+import { ArrowLeft, Pencil, Printer, Trash } from 'lucide-react'
 
 export default function CusList(): React.JSX.Element {
   const host = useContext(HostContext)
@@ -128,7 +129,7 @@ export default function CusList(): React.JSX.Element {
                     <span className="w-2/10">{cus.model}</span>
                     <span className="w-2/10">{cus.IMEI}</span>
                     <span className="w-2/10">{cus.fault}</span>
-                    <span className="w-2/10">200</span>
+                    <span className="w-2/10">{cus.seNumb}</span>
                   </div>
                 ))}
             </section>
@@ -239,6 +240,9 @@ export default function CusList(): React.JSX.Element {
 
             <footer className="w-full h-20 border rounded-xl flex items-center justify-center">
               <div className="flex gap-2">
+                <Link to="/print" className={btn_md_success}>
+                  <Printer />
+                </Link>
                 <button className={btn_md_success} onClick={() => handleUpdateCus()}>
                   <Pencil />
                 </button>

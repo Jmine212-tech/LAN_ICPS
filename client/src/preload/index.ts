@@ -12,7 +12,9 @@ const update = {
     ipcRenderer.on('update:status', listener)
     return () => ipcRenderer.off('update:status', listener)
   },
-  version: () => ipcRenderer.invoke('update:version')
+  version: () => ipcRenderer.invoke('update:version'),
+  // print
+  getPreview: (route, filename) => ipcRenderer.invoke('get-pdf-preview', { route, filename })
 }
 
 if (process.contextIsolated) {

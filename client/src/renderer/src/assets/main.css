@@ -1,1 +1,14 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+@media print {
+  @page {
+    size: A5 portrait;
+    margin: 0; /* Strips "localhost", title, and date */
+  }
+
+  body {
+    padding: 10mm; /* Re-adds margin inside the sheet */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
