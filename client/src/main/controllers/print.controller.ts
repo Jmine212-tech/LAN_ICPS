@@ -1,35 +1,40 @@
-import { is } from '@electron-toolkit/utils'
-import { app, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
+import { ipcMain, BrowserWindow } from 'electron'
 
 export const handlePrint = (): void => {
-  // Register the print handler in the Main process
-  ipcMain.handle('get-pdf-preview', async (event, { route, filename }) => {
-    console.log('route: ', route, 'and', 'filename: ', filename)
+  ipcMain.handle('printer:print', (event, options = {}) => {
+    const printWin = BrowserWindow.fromWebContents(event.sender)
+    if (!printWin) return { success: false, error: 'target window not found!' }
 
-    const printWin = new BrowserWindow({
-      webPreferences: {
-        nodeIntegration: false,
-        contextIsolation: true
-      }
-    })
-
-    const baseUrl = `http://localhost:5173/#${route}`
-
-    await printWin.loadURL(baseUrl)
-
-    printWin.webContents.executeJavaScript('document.fonts.ready')
-
-    await printWin.webContents
-      .printToPDF({
-        pageSize: 'A5',
-        printBackground: true,
-        margins: {
-          marginType: 'none'
+    return new Promise((resolve) => {
+      printWin.webContents.print(
+        {
+          silent: options.silent ?? true, // true = no dialog; false = system dialog
+          printBackground: true, // preserve CSS colors & backgrounds
+          deviceName: options.printerName || '', // target specific printer, or empty for default
+          color: options.color ?? true,
+          copies: options.copies || 1,
+          pageSize: options.pageSize || 'A5',
+          landscape: options.landscape || false,
+          margins: {
+            marginType: 'none' // 'default', 'none', or 'printableArea'
+          }
+        },
+        (success, failureReason) => {
+          if (!success) {
+            resolve({ success: false, error: failureReason })
+          } else {
+            resolve({ success: true })
+          }
         }
-      })
-      .then((info) => console.log('success', info))
+      )
+    })
+  })
 
-    printWin.destroy()
+  // Optional: Retrieve available system printers
+  ipcMain.handle('printer:getPrinter', async (event) => {
+    const printWin = BrowserWindow.fromWebContents(event.sender)
+    if (!printWin) return []
+
+    return await printWin.webContents.getPrintersAsync()
   })
 }

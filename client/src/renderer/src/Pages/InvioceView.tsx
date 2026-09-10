@@ -1,96 +1,73 @@
 import { btn_md } from '@renderer/components/button/btn'
-import { Link } from 'react-router-dom'
+import { select_md } from '@renderer/components/select/select'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import '../assets/print.css'
+
+type Printer = {
+  name: string
+}
 
 export default function InvoiceView(): React.JSX.Element {
-  const handlePrint = async () => {
-    //@ts-ignore
-    await window.update.getPreview('print', 'invoiceView.pdf')
+  const [printers, setPrinters] = useState([])
+  const [selectPrinter, setSelectPrinter] = useState<string>('')
+  const [pageSize, setPageSize] = useState('A4')
+
+  const paperSize = ['A4', 'A5']
+
+  useEffect(() => {
+    const fetch = async (): Promise<void> => {
+      const res = await window.printer.getPrinter()
+      setPrinters(res)
+    }
+    fetch()
+  }, [])
+
+  const handlePrint = async (): Promise<void> => {
+    try {
+      await window.printer.print({
+        printerName: selectPrinter,
+        pageSize: pageSize
+      })
+    } catch (error) {
+      console.error(`[print] error: `, error)
+      toast.error(`fail to print`)
+    }
   }
 
   return (
-    // Fixed A4 dimensions for pixel-perfect layout: 210mm x 297mm
-    <div className="w-[210mm] min-h-[297mm] p-10 mx-auto bg-white text-slate-800 antialiased box-border">
-      {/* hide when print */}
-      <div className="print:hidden">
-        <Link className={btn_md} to={'/'}>
-          back
-        </Link>
-        <button className={btn_md} onClick={() => handlePrint()}>
-          print
-        </button>
-      </div>
+    <div className={`w-[148] h-[210] flex flex-col items-center justify-center print:m-0`}>
+      <main className="w-120 h-160 border rounded-xl p-1.5">
+        <header className={`w-full p-1.5 pb-2.5 flex items-center`}>
+          <select
+            className={select_md}
+            value={selectPrinter}
+            onChange={(e) => setSelectPrinter(e.target.value)}
+          >
+            {printers.map((printer: Printer) => (
+              <option key={printer.name} value={printer.name}>
+                {printer.name}{' '}
+              </option>
+            ))}
+          </select>
+          <select value={pageSize} onChange={(e) => setPageSize(e.target.value)}>
+            {paperSize.map((size) => (
+              <option className={select_md} key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+          <button className={btn_md} onClick={() => handlePrint()}>
+            Print
+          </button>
+        </header>
 
-      {/* Header */}
-      <div className="flex justify-between items-start border-b border-slate-200 pb-6">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-indigo-600">INVOICE</h1>
-          <p className="text-xs text-slate-500 mt-1">Ref: #INV-2026-089</p>
+        <div className="w-full h-130 border flex items-center justify-center font-bold text-2xl">
+          test
         </div>
-        <div className="text-right text-sm">
-          <p className="font-semibold text-slate-900">Acme Corporation</p>
-          <p className="text-slate-500">Yangon, Myanmar</p>
-          <p className="text-slate-500">billing@acme.corp</p>
-        </div>
-      </div>
 
-      {/* Bill To Info */}
-      <div className="mt-8 flex justify-between">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-            Billed To
-          </span>
-          <p className="text-sm font-semibold text-slate-900 mt-1">Jane Doe</p>
-          <p className="text-sm text-slate-500">Apex Software Ltd.</p>
-        </div>
-        <div className="text-right">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-            Issue Date
-          </span>
-          <p className="text-sm text-slate-700 mt-1">September 7, 2026</p>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="mt-8">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-slate-300 bg-slate-50 text-xs font-semibold uppercase text-slate-600">
-              <th className="py-3 px-4">Description</th>
-              <th className="py-3 px-4 text-center">Qty</th>
-              <th className="py-3 px-4 text-right">Price</th>
-              <th className="py-3 px-4 text-right">Amount</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 text-sm">
-            <tr>
-              <td className="py-4 px-4 font-medium text-slate-800">React & Electron Desktop UI</td>
-              <td className="py-4 px-4 text-center text-slate-600">1</td>
-              <td className="py-4 px-4 text-right text-slate-600">$1,200.00</td>
-              <td className="py-4 px-4 text-right font-semibold text-slate-900">$1,200.00</td>
-            </tr>
-            <tr>
-              <td className="py-4 px-4 font-medium text-slate-800">Tailwind CSS Print Styling</td>
-              <td className="py-4 px-4 text-center text-slate-600">1</td>
-              <td className="py-4 px-4 text-right text-slate-600">$450.00</td>
-              <td className="py-4 px-4 text-right font-semibold text-slate-900">$450.00</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* Totals */}
-      <div className="mt-6 flex justify-end">
-        <div className="w-64 space-y-2 text-sm">
-          <div className="flex justify-between text-slate-500">
-            <span>Subtotal</span>
-            <span>$1,650.00</span>
-          </div>
-          <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-bold text-slate-900">
-            <span>Total Due</span>
-            <span className="text-indigo-600">$1,650.00</span>
-          </div>
-        </div>
-      </div>
+        <footer className="text-center w-full p-1.5 pt-2.5">footer</footer>
+      </main>
     </div>
   )
 }

@@ -1,5 +1,7 @@
 /// <reference types="vite/client" />
 
+import { SetStateAction } from "react"
+
 interface Window {
   api: unknown
   update: {
@@ -7,8 +9,10 @@ interface Window {
     onDownload: () => void
     onStatus: (msg: unknown) => unknown
     version: () => unknowns
-
-    getPreview: () => Promise<{ success: boolean; url?: string; error?: string }>
+  },
+  printer: {
+    getPrinter: () => Promise<SetStateAction>
+    print: ({ printerName: string, pageSize: string }) => Promise<void>
   }
 }
 

@@ -12,9 +12,12 @@ const update = {
     ipcRenderer.on('update:status', listener)
     return () => ipcRenderer.off('update:status', listener)
   },
-  version: () => ipcRenderer.invoke('update:version'),
-  // print
-  getPreview: (route, filename) => ipcRenderer.invoke('get-pdf-preview', { route, filename })
+  version: () => ipcRenderer.invoke('update:version')
+}
+
+const printer = {
+  getPrinter: () => ipcRenderer.invoke('printer:getPrinter'),
+  print: (options) => ipcRenderer.invoke('printer:print', options)
 }
 
 if (process.contextIsolated) {
@@ -22,6 +25,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('update', update)
+    contextBridge.exposeInMainWorld('printer', printer)
   } catch (error) {
     console.error(error)
   }
@@ -32,4 +36,6 @@ if (process.contextIsolated) {
   window.api = api
   // @ts-ignore (define in dts)
   window.update = update
+  // @ts-ignore (define in dts)
+  window.printer = print
 }
