@@ -7,17 +7,17 @@ const api = {}
 const update = {
   onCheck: () => ipcRenderer.invoke('update:check'),
   onDownload: () => ipcRenderer.invoke('update:download'),
+  version: () => ipcRenderer.invoke('update:version'),
   onStatus: (callback: (msg) => void) => {
     const listener = (_, msg): void => callback(msg)
     ipcRenderer.on('update:status', listener)
     return () => ipcRenderer.off('update:status', listener)
-  },
-  version: () => ipcRenderer.invoke('update:version')
+  }
 }
 
 const printer = {
   getPrinter: () => ipcRenderer.invoke('printer:getPrinter'),
-  print: (options) => ipcRenderer.invoke('printer:print', options)
+  print: (options) => ipcRenderer.invoke('printer:print', options),
 }
 
 if (process.contextIsolated) {

@@ -6,4 +6,10 @@
     margin-right: 0 !important;
     size: auto; /* allows the page size set in main.js to take precedence */
   }
+
+  body {
+    padding: 10mm; /* Re-adds margin inside the sheet */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

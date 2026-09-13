@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { SetStateAction } from "react"
+import { SetStateAction } from 'react'
 
 interface Window {
   api: unknown
@@ -8,11 +8,13 @@ interface Window {
     onCheck: () => void
     onDownload: () => void
     onStatus: (msg: unknown) => unknown
-    version: () => unknowns
-  },
+    version: () => SetStateAction<string>
+  }
   printer: {
     getPrinter: () => Promise<SetStateAction>
     print: ({ printerName: string, pageSize: string }) => Promise<void>
+    sendInfo: (id) => unknown
+    getInfo: () => unknown
   }
 }
 
@@ -29,8 +31,7 @@ interface UpdateStatusPayload {
   }
 }
 
-// id, name, model, IMEI, fault, price, expense, isFinish, isTake, seNumb
-type Customer = {
+interface customer {
   _id: string
   name: string
   model: string

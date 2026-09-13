@@ -17,8 +17,7 @@ export default function App(): React.JSX.Element {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="setting" element={<Setting />} />
         </Route>
-        
-          <Route path="/print" element={<InvoiceView />} />
+        <Route path="/print" element={<InvoiceView />} />
       </Routes>
     </HashRouter>
   )

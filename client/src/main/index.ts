@@ -5,7 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import { ChildProcess, fork } from 'child_process'
 import { setupAutoUpdater } from './controllers/update.controller'
 import { createMenu } from './controllers/menu.controller'
-import { handlePrint } from './controllers/print.controller'
+import { initPrint } from './controllers/print.controller'
 
 const serverPath = (): string => {
   return app.isPackaged
@@ -64,7 +64,7 @@ app.whenReady().then(() => {
   createMenu(mainWindow)
   setupAutoUpdater(mainWindow)
   // print
-  handlePrint()
+  initPrint()
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

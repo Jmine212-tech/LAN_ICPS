@@ -1,9 +1,11 @@
 import express from "express";
 import http from "http";
 import cors from "cors";
-import CusRoute from "./router/Cus.router.js";
-import Connect_DB from "./DB/DB.js";
 import { Server } from "socket.io";
+import Connect_DB from "./DB/DB.js";
+
+import CusRoute from "./router/Cus.Route.js";
+import serviceRoute from "./router/service.Route.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -25,6 +27,7 @@ app.use(
 Connect_DB(DB_Url).then(() => console.log(`[Server] DB connected`));
 // customer CRUD
 app.use("/api", CusRoute);
+app.use("/api", serviceRoute);
 
 server.listen(PORT, () => {
   console.log(`[Server] run at port: ${HOST}:${PORT}`);

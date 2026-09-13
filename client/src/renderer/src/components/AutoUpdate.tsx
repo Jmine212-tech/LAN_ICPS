@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
 import { btn_md } from './button/btn'
+import ProgressBar from './progressBar/ProgressBar'
 
 export default function AutoUpdate(): React.JSX.Element {
   const [status, setStatus] = useState('')
   const [message, setMessage] = useState('')
+  const [version, setVersion] = useState('')
   const [progress, setProgress] = useState(0)
 
   const fetch = async (): Promise<void> => {
     try {
       window.update.onCheck()
+      const VERSION = window.update.version()
+      setVersion(VERSION)
 
       await window.update.onStatus((res) => {
         if (res.status == 'check') {
@@ -53,9 +57,12 @@ export default function AutoUpdate(): React.JSX.Element {
 
   return (
     <div className="p-2.5">
-      {status}
+      <p>{status}</p>
+      <p className="w-full p-1.5">
+        version: <span className="font-bold">{version}</span>
+      </p>
       {message == '' ? <p>message: no active</p> : <p>message: {message}</p>}
-      {progress > 0 && <p>progress: {progress} </p>}
+      {progress > 0 && <ProgressBar percent={progress} />}
       <button className={btn_md} onClick={() => handleUpdate()}>
         download
       </button>

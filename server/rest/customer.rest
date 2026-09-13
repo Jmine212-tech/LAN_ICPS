@@ -1,7 +1,13 @@
 @baseUrl = http://localhost:3010/api/customers
+@id = 6aa65b99d9f389d0c4f4352c
 
 ### 1. GET all items
 GET {{baseUrl}}
+
+###
+
+### GET customer group by date
+GET http://localhost:3010/api/customers/group
 
 ###
 
