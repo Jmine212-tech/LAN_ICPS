@@ -50,10 +50,15 @@ export default function CusList(): React.JSX.Element {
   }
   // ------- handle confirm select Date
   const handleConfirmSelectDate = (): void => {
-    setDate(selectDate)
-    toast.success(`Date: ${selectDate}`)
-    setSelectDate('')
-    setCalendar(false)
+    if (selectDate == '') {
+      setCalendar(false)
+      return
+    } else {
+      setDate(selectDate)
+      toast.success(`Date: ${selectDate}`)
+      setSelectDate('')
+      setCalendar(false)
+    }
   }
   // ------------ init repair list
   const repairList = CusGroup.find((prev) => prev._id == date) // customer Data
@@ -241,14 +246,19 @@ export default function CusList(): React.JSX.Element {
                   <div
                     onClick={() => handleDetail(cus)}
                     key={cus._id}
-                    className="p-1 flex items-center gap-1.5 hover:bg-stone-300"
+                    className={`p-1 flex items-center gap-1.5 hover:bg-stone-300 ${cus.isTake == true && `line-through`}`}
                   >
                     <span className="w-1/10">{index + 1}.</span>
-                    <span className="w-2/10">{cus.name}</span>
+                    <span className="w-1/10">{cus.name}</span>
                     <span className="w-2/10">{cus.model}</span>
                     <span className="w-2/10">{cus.IMEI}</span>
                     <span className="w-2/10">{cus.fault}</span>
-                    <span className="w-2/10">{cus.seNumb}</span>
+                    <span className="w-1/10">{cus.seNumb}</span>
+                    <span
+                      className={`w-1/10 border-b ${cus.isFinish == 'finish' && `border-green-500`} ${cus.isFinish == 'fail' && `border-red-500`}`}
+                    >
+                      {cus.isFinish}
+                    </span>
                   </div>
                 ))}
             </section>

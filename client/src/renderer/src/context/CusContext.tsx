@@ -1,5 +1,6 @@
+import { customer } from '@renderer/env'
 import { createContext } from 'react'
 
-const CusContext = createContext<Customer[]>([])
+const CusContext = createContext<customer[]>([])
 
-export default CusContext;
+export default CusContext

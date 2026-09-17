@@ -12,7 +12,7 @@ interface Window {
   }
   printer: {
     getPrinter: () => Promise<SetStateAction>
-    print: ({ printerName: string, pageSize: string }) => Promise<void>
+    print: ({ pageSize: string }) => Promise<void>
     sendInfo: (id) => unknown
     getInfo: () => unknown
   }

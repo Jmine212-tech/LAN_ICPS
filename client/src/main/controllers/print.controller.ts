@@ -9,7 +9,7 @@ export const initPrint = (): void => {
       printWin.webContents.print(
         {
           deviceName: options.deviceName ?? '',
-          silent: options.silent ?? true,
+          silent: options.silent ?? false,
           printBackground: true,
           pageSize: options.pageSize ?? 'A5',
           landscape: options.landscape ?? false,
@@ -25,7 +25,7 @@ export const initPrint = (): void => {
           }
         }
       )
-    })
+    }) 
   })
 
   // Optional: Retrieve available system printers

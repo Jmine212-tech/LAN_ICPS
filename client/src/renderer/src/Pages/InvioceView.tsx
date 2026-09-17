@@ -1,7 +1,8 @@
 import { btn_md } from '@renderer/components/button/btn'
 import { NavLink, useLocation } from 'react-router-dom'
-import { PhoneIcon } from 'lucide-react'
+import { Check, PhoneIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useEffect, useState } from 'react'
 
 export default function InvoiceView(): React.JSX.Element {
   const location = useLocation()
@@ -14,16 +15,28 @@ export default function InvoiceView(): React.JSX.Element {
   const seNumb = cusInfo?.seNumb ?? 0
   const createdAt = cusInfo?.createdAt ?? ''
 
+  const [sim, setSim] = useState(false)
+  const [cover, setCover] = useState(false)
+  const [engNotice, setEngNotice] = useState(true)
+
   // submit print
   const handlePrint = async (): Promise<void> => {
     try {
-      await window.printer.print({ silent: false })
+      await window.printer.print({ pageSize: 'A5' })
     } catch (error) {
       console.error(`[print] error: `, error)
       toast.error('something wrong')
     }
   }
-
+  // --------------- fetch data
+  useEffect(() => {
+    const fetch = async (): Promise<void> => {
+      //@ts-ignore
+      const res = await window.printer.getPrinter()
+      console.log(res)
+    }
+    fetch()
+  }, [])
   // ----------------- render content ------------------
   return (
     <div className={`min-w-[148mm] min-h-[210mm] m-0 flex flex-col items-center`}>
@@ -49,7 +62,7 @@ export default function InvoiceView(): React.JSX.Element {
           </div>
         </header>
         {/* ----------------- MAIN content -------------------- */}
-        <div id="CONTENT" className="w-full h-130 border-stone-300 pl-2 pr-2">
+        <div id="CONTENT" className="w-full border-stone-300 pl-2 pr-2">
           <section className="flex items-center justify-between p-1.5">
             <p className="text-lg">
               date: <span className="font-bold">{createdAt}</span>
@@ -81,17 +94,31 @@ export default function InvoiceView(): React.JSX.Element {
 
               <div className="pt-1.5 pl-2 pr-2 grid grid-flow-row grid-cols-3">
                 <p className="font-bold flex gap-4">
-                  Sim: <span className="w-5 h-5 border rounded-full" />
+                  Sim:{' '}
+                  <span
+                    className="w-5 h-5 border rounded-full flex items-center"
+                    onClick={() => (sim ? setSim(false) : setSim(true))}
+                  >
+                    {' '}
+                    {sim && <Check />}{' '}
+                  </span>
                 </p>
                 <p className="font-bold flex gap-4">
-                  cover: <span className="w-5 h-5 border rounded-full" />
+                  cover:{' '}
+                  <span
+                    className="w-5 h-5 border rounded-full flex items-center"
+                    onClick={() => (cover ? setCover(false) : setCover(true))}
+                  >
+                    {' '}
+                    {cover && <Check />}{' '}
+                  </span>
                 </p>
                 <p className="w-35 h-10 border rounded-2xl"></p>
               </div>
             </label>
           </section>
           {/* ---- price ---- */}
-          <section className="w-full mt-2 flex items-center justify-end">
+          <section className="w-full mt-1 flex items-center justify-end">
             <p className="border border-stone-400 p-2.5 rounded-2xl">
               Total:{' '}
               {price == 0 ? <span>...............................</span> : <span>{price}ks</span>}
@@ -99,12 +126,12 @@ export default function InvoiceView(): React.JSX.Element {
           </section>
 
           {/* ------ confirm payment ---------- */}
-          <section className="w-full h-30 border border-dotted border-stone-400 mt-2.5 rounded-xl flex items-center justify-center">
+          <section className="w-full h-15 border border-dotted border-stone-400 mt-1 rounded-xl flex items-center justify-center">
             <p className="text-stone-400 font-bold">CONFIRM</p>
           </section>
 
           {/* ------ contact us -------- */}
-          <section className="mt-2">
+          <section className="mt-1">
             <p className="text-center">------------ Contact us ---------------</p>
             <div className="flex items-center p-1.5">
               <p className="text-sm flex gap-2">
@@ -114,9 +141,38 @@ export default function InvoiceView(): React.JSX.Element {
           </section>
         </div>
         {/* -------------------- footer --------------------- */}
-        <footer className="mt-2 border-t border-stone-400">
-          <p className="text-center font-semibold">Icrazy Phone Service</p>
-          <p className="font-bold">Warning: </p>
+        <footer className=" w-full border-t border-stone-700 border-dotted text-sm">
+          <button
+            className="text-lg font-semibold border-b active:text-red-500 hover:cursor-pointer"
+            onClick={() => (engNotice ? setEngNotice(false) : setEngNotice(true))}
+          >
+            Notice:{' '}
+          </button>
+          {/* -- notice in eng -- */}
+          {!engNotice && (
+            <div className="pl-2 text-sm">
+              <p>1. When coming to collect your phone, please bring the receipt with you</p>
+              <p>
+                2. We will not be responsible at all for phones left uncollected for more than one
+                month
+              </p>
+              <p>
+                3. We will only be responsible for the issue/problem that was reported and repaired
+              </p>
+              <p>
+                4. If there is any important data stored on your phone, please inform us in advance.
+              </p>
+            </div>
+          )}
+          {/* -- notice in Mya -- */}
+          {engNotice && (
+            <div className="pl-2 text-sm flex flex-col">
+              <p>၁. ဖုန်းလာရောက်ရွေးယူပါက ဘောင်ချာယူလာပေးပါရန်</p>
+              <p>၂. (၁)လ ကျော်ဖုန်းများအား (လုံးဝ) တာဝန်မယူပါ</p>
+              <p>၃. လာရောက်ပြုပြင်သောပြစ်ချက်ကိုသာ တာဝန်ယူမည်</p>
+              <p>၄. မိမိဖုန်းအတွင်းရှိ အရေးကြီးသော Data ရှိလျှင် ကြိုတင် သတိပေးပါရန်</p>
+            </div>
+          )}
         </footer>
       </main>
     </div>

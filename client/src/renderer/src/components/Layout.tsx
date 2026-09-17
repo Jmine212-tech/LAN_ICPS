@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { input_md } from './input/input'
 import { btn_md } from './button/btn'
@@ -17,6 +17,14 @@ export default function Layout(): React.JSX.Element {
   const [host, setHost] = useState(localStorage.getItem('host') || '127.0.0.1')
   const [menu, setMenu] = useState('main')
 
+  // ------------ Edit Ui
+  const [mainLogo, setMainLogo] = useState('Client')
+
+  const Ui = {
+    logo: { mainLogo, setMainLogo },
+    HOST: { host, setHost }
+  }
+
   // -------------- handle set Url ---------------
   const handleSetUrl = async (): Promise<void> => {
     try {
@@ -30,11 +38,20 @@ export default function Layout(): React.JSX.Element {
       toast.error('Fail to set Url')
     }
   }
+
+  // ------------- fetch data
+  useEffect(() => {
+    const fetch = (): void => {
+      setMainLogo(localStorage.getItem('mainLogo') || 'Client')
+    }
+    fetch()
+  }, [])
+
   // -------------- layout -----------------------
   return (
     <div className="w-full h-screen p-1.5 flex flex-col gap-1.5">
       <header className="HEADER w-full h-1/10 flex items-center justify-between border border-stone-500 rounded-xl p-2.5">
-        <h1 className="LOGO text-2xl font-bold font-serif">LAN_ICPS</h1>
+        <h1 className="LOGO text-2xl font-bold font-serif">{mainLogo}</h1>
         {/* -- url input -- */}
         <div>
           <input
@@ -64,13 +81,11 @@ export default function Layout(): React.JSX.Element {
       {/* ---------------------------- outlet ------------------------ */}
       <main className="MAIN w-full h-8/10 border border-stone-400 rounded-xl p-2.5">
         <HostContext value={host}>
-          <Outlet />
+          <Outlet context={Ui} />
         </HostContext>
       </main>
       {/* -------------------- footer ------------------------- */}
-      <footer className="w-full h-1/10 border border-stone-400 rounded-xl flex items-center justify-center p-1.5">
-        123
-      </footer>
+      <footer className="w-full h-1/10 rounded-xl flex items-center justify-center p-1.5 bg-stone-700"></footer>
     </div>
   )
 }

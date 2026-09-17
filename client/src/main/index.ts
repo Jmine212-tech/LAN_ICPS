@@ -7,6 +7,11 @@ import { setupAutoUpdater } from './controllers/update.controller'
 import { createMenu } from './controllers/menu.controller'
 import { initPrint } from './controllers/print.controller'
 
+// 1. Disable Chromium's Private Network Access blocking
+app.commandLine.appendSwitch('disable-features', 'BlockInsecurePrivateNetworkRequests')
+// 2. Ignore certificate / local network connection errors
+app.commandLine.appendSwitch('ignore-certificate-errors')
+
 const serverPath = (): string => {
   return app.isPackaged
     ? join(process.resourcesPath, 'server', 'dist-server', 'server.js')
@@ -30,7 +35,8 @@ function createWindow(): void {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      webSecurity: false
     }
   })
 

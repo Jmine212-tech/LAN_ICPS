@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ArrowLeft, Pencil, Printer, Trash } from 'lucide-react'
 import { btn_md, btn_md_error, btn_md_success } from '../button/btn'
 import axios from 'axios'
@@ -35,7 +35,6 @@ export default function UpdateCusForm({
       if (res.data?.success) {
         toast.success(res.data.message)
       }
-      toast.success('deleted', id)
     } catch (error) {
       console.error(`[client] error: `, error)
     } finally {
